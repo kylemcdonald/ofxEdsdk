@@ -4,7 +4,10 @@
  This is the only file that should reference Edsdk.
  */
 
+#if TARGET_OS_MAC==1
 #define __MACOS__
+#endif
+
 #include "EDSDK.h"
 #include "EDSDKErrors.h"
 #include "EDSDKTypes.h"

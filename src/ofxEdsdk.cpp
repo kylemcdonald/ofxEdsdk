@@ -103,7 +103,7 @@ namespace ofxEdsdk {
 				
 				EdsDeviceInfo info;
 				Eds::GetDeviceInfo(camera, &info);
-				Eds::SafeRelease(cameraList);
+				//Eds::SafeRelease(cameraList);
 				
 				startThread(true, false);
 				return true;
@@ -263,6 +263,7 @@ namespace ofxEdsdk {
 				Eds::StartLiveview(camera);
 			} catch (Eds::Exception& e) {
 				ofLogError() << "There was an error opening the camera, or starting live view: " << e.what();
+				unlock();
 				return;
 			}
 			unlock();
