@@ -105,6 +105,15 @@ namespace ofxEdsdk {
 				Eds::GetDeviceInfo(camera, &info);
 				//Eds::SafeRelease(cameraList);
 				
+				try {
+					Eds::OpenSession(camera);
+					connected = true;
+					Eds::StartLiveview(camera);
+				} catch (Eds::Exception& e) {
+					ofLogError() << "There was an error opening the camera, or starting live view: " << e.what();
+					return false;
+				}
+
 				startThread(true, false);
 				return true;
 			} else {
@@ -256,18 +265,6 @@ namespace ofxEdsdk {
 	}
 	
 	void Camera::threadedFunction() {
-		if(lock()) {
-			try {
-				Eds::OpenSession(camera);
-				connected = true;
-				Eds::StartLiveview(camera);
-			} catch (Eds::Exception& e) {
-				ofLogError() << "There was an error opening the camera, or starting live view: " << e.what();
-				unlock();
-				return;
-			}
-			unlock();
-		}
 		
 		// threaded variables:
 		// liveReady, liveBufferMiddle, liveBufferBack, fps, needToTakePhoto
