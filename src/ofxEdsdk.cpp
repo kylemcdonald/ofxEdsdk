@@ -265,7 +265,6 @@ namespace ofxEdsdk {
 	}
 	
 	void Camera::threadedFunction() {
-		
 		// threaded variables:
 		// liveReady, liveBufferMiddle, liveBufferBack, fps, needToTakePhoto
 		while(isThreadRunning()) {
