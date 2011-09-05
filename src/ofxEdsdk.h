@@ -15,6 +15,7 @@ namespace ofxEdsdk {
 	public:
 		Camera();
 		~Camera();
+		static void listDevices(string* s=0);
 		bool setup(int deviceId = 0);
 		
 		void update();

@@ -11,5 +11,7 @@ public:
 	void draw();
 	void keyPressed(int key);
 	
-	ofxEdsdk::Camera camera;
+	ofxEdsdk::Camera camera[2];
+	
+	int intialised[2];
 };
