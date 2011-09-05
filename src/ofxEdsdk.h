@@ -36,6 +36,10 @@ namespace ofxEdsdk {
 		ofPixels& getPhotoPixels();
 		
 	protected:
+		static void initialize();
+		static void terminate();
+		
+		static bool sdkInitialized; 
 		EdsCameraRef camera;
 		
 		RateTimer fps;

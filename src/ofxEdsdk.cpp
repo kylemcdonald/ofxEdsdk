@@ -73,11 +73,11 @@ namespace ofxEdsdk {
 			}
 			try {
 				Eds::CloseSession(camera);
-				Eds::TerminateSDK();
 			} catch (Eds::Exception& e) {
 				ofLogError() << "There was an error destroying ofxEds::Camera: " << e.what();
 			}
 		}
+		terminate();
 		unlock();
 		for(int i = 0; i < liveBufferMiddle.maxSize(); i++) {
 			delete liveBufferMiddle[i];
@@ -88,7 +88,7 @@ namespace ofxEdsdk {
 		try {
 			stringstream ss;
 			
-			Eds::InitializeSDK();
+			initialize();
 			
 			EdsCameraListRef cameraList;
 			Eds::GetCameraList(&cameraList);
@@ -111,10 +111,10 @@ namespace ofxEdsdk {
 				
 				Eds::SafeRelease(camera);
 			}
+			terminate();
 			
 			Eds::SafeRelease(cameraList);
 			
-			Eds::TerminateSDK();
 			if (s==0) {
 				cout << ss.str() << endl;
 			} else {
@@ -127,7 +127,7 @@ namespace ofxEdsdk {
 	
 	bool Camera::setup(int deviceId) {
 		try {
-			Eds::InitializeSDK();
+			initialize();
 			
 			EdsCameraListRef cameraList;
 			Eds::GetCameraList(&cameraList);
@@ -365,4 +365,21 @@ namespace ofxEdsdk {
 			}
 		}
 	}
+	
+	bool Camera::sdkInitialized = false;
+	
+	void Camera::initialize() {
+		if (!sdkInitialized) {
+			Eds::InitializeSDK();
+			sdkInitialized = true;
+		}
+	}
+	
+	void Camera::terminate() {
+		if (sdkInitialized) {
+			Eds::TerminateSDK();
+			sdkInitialized = false;
+		}
+	}
+
 }
