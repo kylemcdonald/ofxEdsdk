@@ -15,6 +15,7 @@ namespace ofxEdsdk {
 	public:
 		Camera();
 		~Camera();
+		static void listDevices(string* s=0);
 		bool setup(int deviceId = 0);
 		
 		void update();
@@ -35,6 +36,10 @@ namespace ofxEdsdk {
 		ofPixels& getPhotoPixels();
 		
 	protected:
+		static void initialize();
+		static void terminate();
+		
+		static bool sdkInitialized; 
 		EdsCameraRef camera;
 		
 		RateTimer fps;

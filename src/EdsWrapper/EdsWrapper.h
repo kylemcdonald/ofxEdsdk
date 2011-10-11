@@ -75,5 +75,6 @@ namespace Eds {
 	void SetObjectEventHandler(EdsCameraRef inCameraRef, EdsObjectEvent inEvnet, EdsObjectEventHandler inObjectEventHandler, EdsVoid* inContext);
 	void SetCameraStateEventHandler(EdsCameraRef inCameraRef, EdsStateEvent inEvnet, EdsStateEventHandler inStateEventHandler, EdsVoid* inContext);
 	void CreateStream(EdsIStream* inStream, EdsStreamRef* outStreamRef);
-	void GetEvent();	
+	void GetEvent();
+
 }

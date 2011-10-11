@@ -73,20 +73,61 @@ namespace ofxEdsdk {
 			}
 			try {
 				Eds::CloseSession(camera);
-				Eds::TerminateSDK();
 			} catch (Eds::Exception& e) {
 				ofLogError() << "There was an error destroying ofxEds::Camera: " << e.what();
 			}
 		}
+		terminate();
 		unlock();
 		for(int i = 0; i < liveBufferMiddle.maxSize(); i++) {
 			delete liveBufferMiddle[i];
 		}
 	}
 	
+	void Camera::listDevices(string* s) {
+		try {
+			stringstream ss;
+			
+			initialize();
+			
+			EdsCameraListRef cameraList;
+			Eds::GetCameraList(&cameraList);
+			
+			UInt32 cameraCount;
+			Eds::GetChildCount(cameraList, &cameraCount);
+			
+			EdsDeviceInfo info;
+			EdsCameraRef camera;
+			ss << "ofxEdsdk found " << cameraCount << "cameras:" << endl;
+			ss << setw(10) << "Device ID" << setw(25) << "Description" << setw(6) << "Port " << setw(11) << "Reserved" << endl;
+			for(EdsInt32 i=0;i<cameraCount;++i) {
+				Eds::GetChildAtIndex(cameraList, i, &camera);
+				Eds::GetDeviceInfo(camera, &info);
+				
+				ss << setw(10) << i;
+				ss << setw(25) << info.szDeviceDescription;
+				ss << setw(6) << info.szPortName;
+				ss << setw(11) << info.reserved << endl;
+				
+				Eds::SafeRelease(camera);
+			}
+			terminate();
+			
+			Eds::SafeRelease(cameraList);
+			
+			if (s==0) {
+				cout << ss.str() << endl;
+			} else {
+				*s = ss.str();
+			}
+		} catch (Eds::Exception& e) {
+			ofLogError() << "There was an error during Camera::listDevices(): " << e.what();
+		}	
+	}
+	
 	bool Camera::setup(int deviceId) {
 		try {
-			Eds::InitializeSDK();
+			initialize();
 			
 			EdsCameraListRef cameraList;
 			Eds::GetCameraList(&cameraList);
@@ -127,7 +168,7 @@ namespace ofxEdsdk {
 			ofLoadImage(livePixels, liveBufferFront);
 			if(liveTexture.getWidth() != livePixels.getWidth() ||
 				 liveTexture.getHeight() != livePixels.getHeight()) {
-				liveTexture.allocate(livePixels.getWidth(), livePixels.getHeight(), GL_RGB8);
+				liveTexture.allocate(livePixels.getWidth(), livePixels.getHeight(), GL_RGB);
 			}
 			liveTexture.loadData(livePixels);
 			lock();
@@ -220,7 +261,7 @@ namespace ofxEdsdk {
 			if(needToUpdatePhoto) {
 				if(photoTexture.getWidth() != photoPixels.getWidth() ||
 					 photoTexture.getHeight() != photoPixels.getHeight()) {
-					photoTexture.allocate(photoPixels.getWidth(), photoPixels.getHeight(), GL_RGB8);
+					photoTexture.allocate(photoPixels.getWidth(), photoPixels.getHeight(), GL_RGB);
 				}
 				photoTexture.loadData(photoPixels);
 				needToUpdatePhoto = false;
@@ -263,6 +304,7 @@ namespace ofxEdsdk {
 				Eds::StartLiveview(camera);
 			} catch (Eds::Exception& e) {
 				ofLogError() << "There was an error opening the camera, or starting live view: " << e.what();
+				unlock();
 				return;
 			}
 			unlock();
@@ -326,4 +368,21 @@ namespace ofxEdsdk {
 			}
 		}
 	}
+	
+	bool Camera::sdkInitialized = false;
+	
+	void Camera::initialize() {
+		if (!sdkInitialized) {
+			Eds::InitializeSDK();
+			sdkInitialized = true;
+		}
+	}
+	
+	void Camera::terminate() {
+		if (sdkInitialized) {
+			Eds::TerminateSDK();
+			sdkInitialized = false;
+		}
+	}
+
 }
