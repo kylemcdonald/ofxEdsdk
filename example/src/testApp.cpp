@@ -35,4 +35,16 @@ void testApp::keyPressed(int key) {
 	if(key == ' ') {
 		camera.takePhoto();
 	}
+    if(key == 'q') {
+        ofLog() << "setting up save";
+        camera.saveToCamera();
+    }
+    if(key == 'a') {
+        ofLog() << "begin movie shooting";
+        camera.beginMovieRecording();
+    }
+    if(key == 's') {
+        ofLog() << "done movie shooting";
+        camera.endMoveRecording();
+    }
 }

@@ -35,7 +35,11 @@ namespace ofxEdsdk {
 		bool savePhoto(string filename); // .jpg only
 		ofPixels& getPhotoPixels();
 		ofTexture& getPhotoTexture();
-
+        
+        void saveToCamera();
+        void beginMovieRecording();
+        void endMoveRecording();
+        
 	protected:
 		EdsCameraRef camera;
 		

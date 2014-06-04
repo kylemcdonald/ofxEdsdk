@@ -1,7 +1,7 @@
 #pragma once
 
 namespace ofxEdsdk {
-	class RateTimer {
+    class RateTimer {
 	protected:
 		float lastTick, averagePeriod, smoothing;
 		bool secondTick;
@@ -18,6 +18,9 @@ namespace ofxEdsdk {
 		float getFrameRate() {
 			return averagePeriod == 0 ? 0 : 1 / averagePeriod;
 		}
+        void setSmoothing(float smoothing) {
+            this->smoothing = smoothing;
+        }
 		void tick() {
 			float curTick = ofGetElapsedTimef();
 			if(lastTick == 0) {
@@ -33,5 +36,5 @@ namespace ofxEdsdk {
 			}
 			lastTick = curTick;
 		}
-	};	
+	};
 }

@@ -17,6 +17,19 @@
 #include <objbase.h>
 #endif
 namespace ofxEdsdk {
+    
+    void Camera::saveToCamera() {
+        EdsUInt32 saveTo = kEdsSaveTo_Camera;
+        EdsSetPropertyData(camera, kEdsPropID_SaveTo, 0, sizeof(saveTo) , &saveTo);
+    }
+    void Camera::beginMovieRecording() {
+        EdsUInt32 record_start = 4; // Begin movie shooting
+        EdsSetPropertyData(camera, kEdsPropID_Record, 0, sizeof(record_start), &record_start);
+    }
+    void Camera::endMoveRecording() {
+        EdsUInt32 record_stop = 0; // Begin movie shooting
+        EdsSetPropertyData(camera, kEdsPropID_Record, 0, sizeof(record_stop), &record_stop);
+    }
 	
 	EdsError EDSCALLBACK Camera::handleObjectEvent(EdsObjectEvent event, EdsBaseRef object, EdsVoid* context) {
 		ofLogVerbose() << "object event " << Eds::getObjectEventString(event);
