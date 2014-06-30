@@ -12,7 +12,7 @@
 #define OFX_EDSDK_LIVE_DELAY 100
 #ifdef TARGET_OSX
 #include <Cocoa/Cocoa.h>
-#elif TARGET_WIN32
+#elif defined(TARGET_WIN32)
 #define _WIN32_DCOM
 #include <objbase.h>
 #endif
@@ -101,7 +101,7 @@ namespace ofxEdsdk {
 			EdsCameraListRef cameraList;
 			Eds::GetCameraList(&cameraList);
 			
-			UInt32 cameraCount;
+			EdsUInt32 cameraCount;
 			Eds::GetChildCount(cameraList, &cameraCount);
 			
 			if(cameraCount > 0) {				
@@ -244,7 +244,7 @@ namespace ofxEdsdk {
 	
 	void Camera::drawPhoto(float x, float y, float width, float height) {
 		if(photoDataReady) {
-			photoTexture.draw(x, y, width, height);
+            getPhotoTexture().draw(x, y, width, height);
 		}
 	}
 	
@@ -290,19 +290,19 @@ namespace ofxEdsdk {
 	}
 	
 	void Camera::resetLiveView() {
-		lock();
 		if(connected) {
 			Eds::StartLiveview(camera);
+            lock();
 			lastResetTime = ofGetElapsedTimef();
+            unlock();
 		}
-		unlock();
 	}
 	
 	void Camera::threadedFunction() {
 #ifdef TARGET_OSX
 		
 		NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
-#elif TARGET_WIN32
+#elif defined(TARGET_WIN32)
 		CoInitializeEx( NULL, 0x0);// OINIT_MULTITHREADED );
 #endif	
 		lock();
@@ -386,7 +386,7 @@ namespace ofxEdsdk {
 		}
 #ifdef TARGET_OSX
 		[pool drain];
-#elif TARGET_WIN32
+#elif defined(TARGET_WIN32)
 		CoUninitialize();
 #endif
 	}
