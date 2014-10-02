@@ -1,4 +1,5 @@
 #include "CanonDSLRDevice.h"
+#include "ofAppGLFWWindow.h"
 
 namespace ofxMachineVision {
 	namespace Device {
@@ -6,21 +7,35 @@ namespace ofxMachineVision {
 		CanonDSLRDevice::CanonDSLRDevice() {
 			this->openTime = 0;
 			this->frameIndex = 0;
+			this->markFrameNew = false;
 		}
 
 		//----------
 		Specification CanonDSLRDevice::open(int deviceID) {
 			this->camera = shared_ptr<ofxEdsdk::Camera>(new ofxEdsdk::Camera());
-			this->camera->setup(deviceID);
+			if (!this->camera->setup(deviceID)) {
+				return Specification();
+			}
 
 			this->openTime = ofGetElapsedTimeMicros();
 			this->frameIndex = 0;
 
+			//--
+			//single shot with timeout
 			this->camera->takePhoto();
-			while (!this->camera->isFrameNew()) {
+			float startTime = ofGetElapsedTimef();
+			while (!this->camera->isPhotoNew()) {
 				this->camera->update();
+				glfwPollEvents();
 				ofSleepMillis(1);
+				if (ofGetElapsedTimef() - startTime > 10.0f) {
+					throw(ofxMachineVision::Exception("Timeout opening device CanonDSLRDevice"));
+				}
 			}
+			this->markFrameNew = true;
+			//
+			//--
+
 			const auto & pixels = this->camera->getPhotoPixels();
 			Specification specification(pixels.getWidth(), pixels.getHeight(), "Canon", "Unknown");
 			specification.addFeature(ofxMachineVision::Feature::Feature_OneShot);
@@ -36,20 +51,32 @@ namespace ofxMachineVision {
 		//----------
 		void CanonDSLRDevice::singleShot() {
 			this->camera->takePhoto();
+			while (!this->camera->isPhotoNew()) {
+				this->camera->update();
+				glfwPollEvents();
+				ofSleepMillis(1);
+			}
+			this->markFrameNew = true;
 		}
+
 		//----------
 		void CanonDSLRDevice::updateIsFrameNew() {
-
+			this->camera->update();
 		}
 
 		//----------
 		bool CanonDSLRDevice::isFrameNew() {
-			return this->camera->isPhotoNew();
+			if (this->markFrameNew) {
+				this->markFrameNew = false;
+				return true;
+			} else {
+				return this->camera->isPhotoNew();
+			}
 		}
 
 		//----------
-		shared_ptr<ofxMachineVision::Frame> CanonDSLRDevice::getFrame() {
-			auto frame = shared_ptr<ofxMachineVision::Frame>(new Frame());
+		shared_ptr<Frame> CanonDSLRDevice::getFrame() {
+			auto frame = shared_ptr<Frame>(new Frame());
 			frame->getPixelsRef() = this->camera->getPhotoPixels();
 			frame->setTimestamp(ofGetElapsedTimeMicros() - this->openTime);
 			frame->setFrameIndex(this->frameIndex++);
