@@ -25,7 +25,7 @@ namespace ofxEdsdk {
 	EdsError EDSCALLBACK Camera::handleObjectEvent(EdsObjectEvent event, EdsBaseRef object, EdsVoid* context) {
 		ofLogVerbose() << "object event " << Eds::getObjectEventString(event);
 		if(object) {
-			if(event == kEdsObjectEvent_DirItemCreated) {
+			if(event == kEdsObjectEvent_DirItemRequestTransfer) {
 				((Camera*) context)->setDownloadImage(object);
 			} else if(event == kEdsObjectEvent_DirItemRemoved) {
 				// no need to release a removed item
@@ -342,6 +342,21 @@ namespace ofxEdsdk {
 		lock();
 		try {
 			Eds::OpenSession(camera);
+
+			EdsError err = EDS_ERR_OK;
+
+			if(err == EDS_ERR_OK)
+			{
+				EdsUInt32 saveTo = kEdsSaveTo_Host;
+				err = EdsSetPropertyData(camera, kEdsPropID_SaveTo, 0, sizeof(saveTo) , &saveTo);
+			}
+
+			if(err == EDS_ERR_OK)
+			{
+				EdsCapacity capacity = {0x7FFFFFFF, 0x1000, 1};
+				err = EdsSetCapacity(camera, capacity);
+			}
+
 			connected = true;
 #ifdef TARGET_OSX
 			bTryInitLiveView = true;
