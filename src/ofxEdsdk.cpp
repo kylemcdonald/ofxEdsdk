@@ -67,6 +67,10 @@ namespace ofxEdsdk {
     photoNew(false),
     needToStartRecording(false),
     needToStopRecording(false),
+    needToPressShutterButton(false),
+    needToReleaseShutterButton(false),
+    needToLockUI(false),
+    needToUnlockUI(false),
     movieNew(false),
     needToDecodePhoto(false),
     needToUpdatePhoto(false),
@@ -204,6 +208,32 @@ namespace ofxEdsdk {
     {
         lock();
         needToStopRecording = true;
+        unlock();
+    }
+    
+    void Camera::lockUI()
+    {
+        lock();
+        needToLockUI = true;
+        unlock();
+    }
+    
+    void Camera::unlockUI()
+    {
+        lock();
+        needToUnlockUI = true;
+        unlock();
+    }
+    
+    void Camera::pressShutterButton() {
+        lock();
+        needToPressShutterButton=true;
+        unlock();
+    }
+    
+    void Camera::releaseShutterButton() {
+        lock();
+        needToReleaseShutterButton = true;
         unlock();
     }
     
@@ -409,6 +439,52 @@ namespace ofxEdsdk {
                 unlock();
             } catch (Eds::Exception& e) {
                 ofLogError() << "Error while stopping to record: " << e.what();
+            }
+        }
+        
+        if(needToLockUI) {
+            try {
+                Eds::SendStatusCommand(camera, kEdsCameraStatusCommand_UILock, 0);
+            } catch (Eds::Exception& e) {
+                ofLogError() << "Error while sending locking UI: " << e.what();
+            }
+            lock();
+            needToLockUI = false;
+            unlock();
+        }
+        
+        if(needToUnlockUI) {
+            try {
+                
+                Eds::SendStatusCommand(camera, kEdsCameraStatusCommand_UIUnLock, 0);
+            } catch (Eds::Exception& e) {
+                ofLogError() << "Error while unlocking UI: " << e.what();
+            }
+            lock();
+            needToUnlockUI = false;
+            unlock();
+        }
+
+        
+        if(needToPressShutterButton) {
+            try {
+                Eds::SendCommand(camera, kEdsCameraCommand_PressShutterButton, kEdsCameraCommand_ShutterButton_Completely);
+                lock();
+                needToPressShutterButton = false;
+                unlock();
+            } catch (Eds::Exception& e) {
+                ofLogError() << "Error while ending bulb: " << e.what();
+            }
+        }
+        
+        if(needToReleaseShutterButton) {
+            try {
+                Eds::SendCommand(camera, kEdsCameraCommand_PressShutterButton, kEdsCameraCommand_ShutterButton_OFF);
+                lock();
+                needToReleaseShutterButton = false;
+                unlock();
+            } catch (Eds::Exception& e) {
+                ofLogError() << "Error while ending bulb: " << e.what();
             }
         }
         

@@ -44,6 +44,11 @@ namespace ofxEdsdk {
         void endMovieRecording();
         bool isMovieNew();
         
+        void lockUI();
+        void unlockUI();
+        void pressShutterButton();
+        void releaseShutterButton();
+        
     protected:
         void initialize();
         void startCapture();
@@ -99,7 +104,11 @@ namespace ofxEdsdk {
         bool movieNew;
         bool needToStartRecording; // threadedFunction() should start recording next chance it gets.
         bool needToStopRecording; // threadedFunction() should start recording next chance it gets.
-		
+
+        bool needToLockUI;      // threadedFunction() should lock the UI next chance it gets. This makes it impossible to change settings on the camera.
+        bool needToUnlockUI;  // threadedFunction() should unlock the UI next chance it gets.
+        bool needToPressShutterButton; // threadedFunction() should press the shutter button completely down next chance it gets
+        bool needToReleaseShutterButton; // threadedFunction() should release the shutter button completely down next chance it gets
 		void threadedFunction();
         		
 		// the liveview needs to be reset every so often to avoid the camera turning off
