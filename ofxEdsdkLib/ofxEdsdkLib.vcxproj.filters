@@ -16,12 +16,6 @@
     <Filter Include="libs\EDSDK\include">
       <UniqueIdentifier>{fc6b5b97-23a2-4b40-bbbf-e6fefffeefc0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\External">
-      <UniqueIdentifier>{5e47f21e-2be5-4c6c-ba22-aa95a9a9d7ee}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\External\ofxMachineVision">
-      <UniqueIdentifier>{8ac173b4-6878-4f16-bb82-a2dec3ee35ef}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\addons\ofxEdsdk\src\ofxEdsdk.cpp">
@@ -38,9 +32,6 @@
     </ClCompile>
     <ClCompile Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsWrapper.cpp">
       <Filter>src\EdsWrapper</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\External\ofxMachineVision\CanonDSLRDevice.cpp">
-      <Filter>src\External\ofxMachineVision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -73,9 +64,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsWrapper.h">
       <Filter>src\EdsWrapper</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\External\ofxMachineVision\CanonDSLRDevice.h">
-      <Filter>src\External\ofxMachineVision</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

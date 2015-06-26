@@ -1,12 +1,13 @@
 #pragma once
 
-#include "ofxEdsdk.h"
+#include "../../../addons/ofxEdsdk/src/ofxEdsdk.h"
 #include "../../../addons/ofxMachineVision/src/ofxMachineVision/Device/Updating.h"
 namespace ofxMachineVision {
 	namespace Device {
 		class CanonDSLRDevice : public Updating {
 		public:
 			CanonDSLRDevice();
+			string getTypeName() const override;
 			Specification open(int deviceID) override;
 			void close() override;
 			void singleShot() override;

@@ -19,31 +19,32 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{630936F8-C65F-4AB9-92AD-80569EAA7782}</ProjectGuid>
-    <RootNamespace>ofxEdsdkLib</RootNamespace>
+    <ProjectGuid>{F8877612-5358-423D-980F-28A6DBDF252E}</ProjectGuid>
+    <RootNamespace>examplePlugin</RootNamespace>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -52,69 +53,53 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
-    <Import Project="ofxEdsdk.props" />
-    <Import Project="..\..\ofxAddonLib\ofxAddonLib.props" />
+    <Import Project="..\..\..\addons\ofxPlugin\ofxPluginLib\ofxPlugin.props" />
+    <Import Project="..\ofxEdsdkLib\ofxEdsdk.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksDebug.props" />
-    <Import Project="ofxEdsdk.props" />
-    <Import Project="..\..\ofxAddonLib\ofxAddonLib.props" />
+    <Import Project="..\..\..\addons\ofxPlugin\ofxPluginLib\ofxPlugin.props" />
+    <Import Project="..\ofxEdsdkLib\ofxEdsdk.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
-    <Import Project="ofxEdsdk.props" />
-    <Import Project="..\..\ofxAddonLib\ofxAddonLib.props" />
+    <Import Project="..\..\..\addons\ofxPlugin\ofxPluginLib\ofxPlugin.props" />
+    <Import Project="..\ofxEdsdkLib\ofxEdsdk.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="..\..\..\libs\openFrameworksCompiled\project\vs\openFrameworksRelease.props" />
-    <Import Project="ofxEdsdk.props" />
-    <Import Project="..\..\ofxAddonLib\ofxAddonLib.props" />
+    <Import Project="..\..\..\addons\ofxPlugin\ofxPluginLib\ofxPlugin.props" />
+    <Import Project="..\ofxEdsdkLib\ofxEdsdk.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <TargetName>$(ProjectName)d</TargetName>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../../addons/ofxEdsdk/libs/EDSDK/include;../../../addons/ofxEdsdk/src;../../../addons/ofxEdsdk/src/EdsWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>../../../addons/ofxEdsdk/libs/EDSDK/lib/win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <Lib>
-      <AdditionalDependencies>EDSDK.lib</AdditionalDependencies>
-    </Lib>
-    <Lib>
-      <AdditionalLibraryDirectories>../../../addons/ofxEdsdk/libs/EDSDK/lib/win32</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../../addons/ofxEdsdk/libs/EDSDK/include;../../../addons/ofxEdsdk/src;../../../addons/ofxEdsdk/src/EdsWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../../addons/ofxEdsdk/libs/EDSDK/lib/win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
-    <Lib>
-      <AdditionalDependencies>EDSDK.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../../addons/ofxEdsdk/libs/EDSDK/lib/win64</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -123,19 +108,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../../addons/ofxEdsdk/libs/EDSDK/include;../../../addons/ofxEdsdk/src;../../../addons/ofxEdsdk/src/EdsWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>../../../addons/ofxEdsdk/libs/EDSDK/lib/win32</AdditionalLibraryDirectories>
-      <AdditionalDependencies>EDSDK.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>E:\openFrameworks\addons\ofxEdsdk\libs\EDSDK\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -144,38 +122,33 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../../addons/ofxEdsdk/libs/EDSDK/include;../../../addons/ofxEdsdk/src;../../../addons/ofxEdsdk/src/EdsWrapper;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../../addons/ofxEdsdk/libs/EDSDK/lib/win64</AdditionalLibraryDirectories>
     </Link>
-    <Lib>
-      <AdditionalDependencies>EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>E:\openFrameworks\addons\ofxEdsdk\libs\EDSDK\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsExamples.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsException.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsStrings.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsWrapper.cpp" />
-    <ClCompile Include="..\..\..\addons\ofxEdsdk\src\ofxEdsdk.cpp" />
+    <ClCompile Include="src\CanonDSLRDevice.cpp" />
+    <ClCompile Include="src\plugin.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\addons\ofxEdsdk\libs\EDSDK\include\EDSDK.h" />
-    <ClInclude Include="..\..\..\addons\ofxEdsdk\libs\EDSDK\include\EDSDKErrors.h" />
-    <ClInclude Include="..\..\..\addons\ofxEdsdk\libs\EDSDK\include\EDSDKTypes.h" />
-    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsExamples.h" />
-    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsException.h" />
-    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsStrings.h" />
-    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsWrapper.h" />
-    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\FixedQueue.h" />
-    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\ofxEdsdk.h" />
-    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\RateTimer.h" />
+    <ClInclude Include="src\CanonDSLRDevice.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\libs\openFrameworksCompiled\project\vs\openframeworksLib.vcxproj">
+      <Project>{5837595d-aca9-485c-8e76-729040ce4b0b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ofxMachineVision\ofxMachineVisionLib\ofxMachineVisionLib.vcxproj">
+      <Project>{cd4455e0-0454-4c3c-bb42-9d15d16a34dd}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ofxPlugin\ofxPluginLib\ofxPluginLib.vcxproj">
+      <Project>{68b9239b-5ae6-45c0-b1cb-6fc6b58bb6ee}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\ofxEdsdkLib\ofxEdsdkLib.vcxproj">
+      <Project>{630936f8-c65f-4ab9-92ad-80569eaa7782}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

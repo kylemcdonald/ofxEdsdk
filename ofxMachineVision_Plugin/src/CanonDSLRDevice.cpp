@@ -11,6 +11,11 @@ namespace ofxMachineVision {
 		}
 
 		//----------
+		string CanonDSLRDevice::getTypeName() const {
+			return "CanonDSLRDevice";
+		}
+
+		//----------
 		Specification CanonDSLRDevice::open(int deviceID) {
 			this->camera = shared_ptr<ofxEdsdk::Camera>(new ofxEdsdk::Camera());
 			if (!this->camera->setup(deviceID)) {
@@ -77,7 +82,7 @@ namespace ofxMachineVision {
 		//----------
 		shared_ptr<Frame> CanonDSLRDevice::getFrame() {
 			auto frame = shared_ptr<Frame>(new Frame());
-			frame->getPixelsRef() = this->camera->getPhotoPixels();
+			frame->getPixels() = this->camera->getPhotoPixels();
 			frame->setTimestamp(ofGetElapsedTimeMicros() - this->openTime);
 			frame->setFrameIndex(this->frameIndex++);
 			return frame;
