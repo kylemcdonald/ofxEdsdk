@@ -21,6 +21,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{630936F8-C65F-4AB9-92AD-80569EAA7782}</ProjectGuid>
     <RootNamespace>ofxEdsdkLib</RootNamespace>
+    <TargetPlatformVersion>8.1</TargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -36,7 +37,7 @@
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -93,11 +94,15 @@
       <AdditionalDependencies>EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>EDSDK.lib</AdditionalDependencies>
+      <AdditionalDependencies>EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
-      <AdditionalLibraryDirectories>../../../addons/ofxEdsdk/libs/EDSDK/lib/win32</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\addons\ofxEdsdk\libs\EDSDK\lib\$(Platform)</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\libs\EDSDK\bin\$(Platform)/" "$(SolutionDir)bin/data/" "*.dll" /njs /njh /np /fp /bytes
+if errorlevel 1 exit 0 else exit %errorlevel%</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -112,9 +117,13 @@
       <AdditionalLibraryDirectories>../../../addons/ofxEdsdk/libs/EDSDK/lib/win64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Lib>
-      <AdditionalDependencies>EDSDK.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>../../../addons/ofxEdsdk/libs/EDSDK/lib/win64</AdditionalLibraryDirectories>
+      <AdditionalDependencies>EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\addons\ofxEdsdk\libs\EDSDK\lib\$(Platform)</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\libs\EDSDK\bin\$(Platform)/" "$(SolutionDir)bin/data/" "*.dll" /njs /njh /np /fp /bytes
+if errorlevel 1 exit 0 else exit %errorlevel%</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -133,9 +142,13 @@
       <AdditionalDependencies>EDSDK.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalLibraryDirectories>E:\openFrameworks\addons\ofxEdsdk\libs\EDSDK\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\addons\ofxEdsdk\libs\EDSDK\lib\$(Platform)</AdditionalLibraryDirectories>
       <AdditionalDependencies>EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
+    <PostBuildEvent>
+      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\libs\EDSDK\bin\$(Platform)/" "$(SolutionDir)bin/data/" "*.dll" /njs /njh /np /fp /bytes
+if errorlevel 1 exit 0 else exit %errorlevel%</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -155,8 +168,12 @@
     </Link>
     <Lib>
       <AdditionalDependencies>EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>E:\openFrameworks\addons\ofxEdsdk\libs\EDSDK\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\..\..\addons\ofxEdsdk\libs\EDSDK\lib\$(Platform)</AdditionalLibraryDirectories>
     </Lib>
+    <PostBuildEvent>
+      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\libs\EDSDK\bin\$(Platform)/" "$(SolutionDir)bin/data/" "*.dll" /njs /njh /np /fp /bytes
+if errorlevel 1 exit 0 else exit %errorlevel%</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsExamples.cpp" />

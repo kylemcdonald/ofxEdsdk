@@ -9,11 +9,8 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\..\addons\ofxEdsdk\libs\EDSDK\lib\$(Platform);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PreBuildEvent>
-      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\lib\EDSDK\bin\$(Platform)/" "$(TargetDir)./" "*.dll" /njs /njh /np /fp /bytes
-if errorlevel 1 exit 0 else exit %errorlevel%</Command>
-    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>
