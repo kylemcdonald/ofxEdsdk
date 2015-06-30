@@ -5,7 +5,7 @@
  */
 
 #include "ofMain.h"
-#include "EdsWrapper.h"
+#include "EdsWrapper/EdsWrapper.h"
 #include "RateTimer.h"
 #include "FixedQueue.h"
 

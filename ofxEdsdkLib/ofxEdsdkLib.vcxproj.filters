@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4356c1ad-4c20-466e-af4f-c2c3179b5a31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\EdsWrapper">
+      <UniqueIdentifier>{c1c99b77-f9ec-4e8b-b13e-68a0118bddaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs">
+      <UniqueIdentifier>{a6204f45-c9fe-4485-b2a0-b15ae4ffcf33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\EDSDK">
+      <UniqueIdentifier>{0edd1acf-0fb5-4898-b391-9b5768c2a297}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libs\EDSDK\include">
+      <UniqueIdentifier>{fc6b5b97-23a2-4b40-bbbf-e6fefffeefc0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\addons\ofxEdsdk\src\ofxEdsdk.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsExamples.cpp">
+      <Filter>src\EdsWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsException.cpp">
+      <Filter>src\EdsWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsStrings.cpp">
+      <Filter>src\EdsWrapper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsWrapper.cpp">
+      <Filter>src\EdsWrapper</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\addons\ofxEdsdk\libs\EDSDK\include\EDSDKTypes.h">
+      <Filter>libs\EDSDK\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEdsdk\libs\EDSDK\include\EDSDKErrors.h">
+      <Filter>libs\EDSDK\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEdsdk\libs\EDSDK\include\EDSDK.h">
+      <Filter>libs\EDSDK\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\RateTimer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\FixedQueue.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\ofxEdsdk.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsExamples.h">
+      <Filter>src\EdsWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsException.h">
+      <Filter>src\EdsWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsStrings.h">
+      <Filter>src\EdsWrapper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\addons\ofxEdsdk\src\EdsWrapper\EdsWrapper.h">
+      <Filter>src\EdsWrapper</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
