@@ -4,9 +4,7 @@
  This is the only file that should reference Edsdk.
  */
 
-#include "ofMain.h"
-
-#if defined(TARGET_OSX)
+#if TARGET_OS_MAC==1
 #define __MACOS__
 #endif
 
