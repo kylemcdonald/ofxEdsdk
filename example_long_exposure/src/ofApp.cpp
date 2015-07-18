@@ -31,6 +31,7 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofSetColor(255);
     camera.draw(0, 0);
     camera.drawPhoto(0, 0, 432, 288);
     

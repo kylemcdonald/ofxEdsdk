@@ -49,6 +49,15 @@ namespace ofxEdsdk {
         void pressShutterButton();
         void releaseShutterButton();
         
+        int bulbExposureTime;
+        bool bShutterButtonDown;
+        bool isShutterButtonPressed() {
+            return bShutterButtonDown;
+        }
+        bool isConnected() {
+            return connected;
+        }
+        
     protected:
         void initialize();
         void startCapture();

@@ -13,6 +13,7 @@
 
 #define OFX_EDSDK_JPG_FORMAT 14337
 #define OFX_EDSDK_MOV_FORMAT 45316
+#define OFX_EDSDK_MOV_FORMAT_2 45317
 
 #if defined(TARGET_WIN32)
 #define _WIN32_DCOM
@@ -52,11 +53,16 @@ namespace ofxEdsdk {
         if(event == kEdsStateEvent_WillSoonShutDown) {
             ((Camera*) context)->setSendKeepAlive();
         }
+        if(event == kEdsStateEvent_BulbExposureTime) {
+            ((Camera*) context)->bulbExposureTime = param;
+        }
         return EDS_ERR_OK;
     }
     
     Camera::Camera() :
     deviceId(0),
+    bulbExposureTime(0),
+    bShutterButtonDown(false),
     orientationMode(0),
     bytesPerFrame(0),
     connected(false),
@@ -471,6 +477,7 @@ namespace ofxEdsdk {
                 Eds::SendCommand(camera, kEdsCameraCommand_PressShutterButton, kEdsCameraCommand_ShutterButton_Completely);
                 lock();
                 needToPressShutterButton = false;
+                bShutterButtonDown = true;
                 unlock();
             } catch (Eds::Exception& e) {
                 ofLogError() << "Error while ending bulb: " << e.what();
@@ -482,6 +489,7 @@ namespace ofxEdsdk {
                 Eds::SendCommand(camera, kEdsCameraCommand_PressShutterButton, kEdsCameraCommand_ShutterButton_OFF);
                 lock();
                 needToReleaseShutterButton = false;
+                bShutterButtonDown = false;
                 unlock();
             } catch (Eds::Exception& e) {
                 ofLogError() << "Error while ending bulb: " << e.what();
@@ -511,9 +519,11 @@ namespace ofxEdsdk {
                 needToUpdatePhoto = true;
                 needToDownloadImage = false;
                 
+                
                 if (dirItemInfo.format == OFX_EDSDK_JPG_FORMAT) {
                     photoNew = true;
-                } else if (dirItemInfo.format == OFX_EDSDK_MOV_FORMAT) {
+                    
+                } else if (dirItemInfo.format == OFX_EDSDK_MOV_FORMAT || dirItemInfo.format == OFX_EDSDK_MOV_FORMAT_2) {
                     movieNew = true;
                 }
                 
