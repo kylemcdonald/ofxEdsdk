@@ -45,6 +45,7 @@ namespace ofxEdsdk {
         if(propertyId == kEdsPropID_Evf_OutputDevice) {
             ((Camera*) context)->setLiveViewReady(true);
         }
+
         return EDS_ERR_OK;
     }
     
@@ -56,6 +57,9 @@ namespace ofxEdsdk {
         if(event == kEdsStateEvent_BulbExposureTime) {
             ((Camera*) context)->bulbExposureTime = param;
         }
+        if(event == kEdsStateEvent_Shutdown) {
+            ((Camera*) context)->setLiveViewReady(false);
+        }
         return EDS_ERR_OK;
     }
     
@@ -66,6 +70,7 @@ namespace ofxEdsdk {
     orientationMode(0),
     bytesPerFrame(0),
     connected(false),
+    recordingMovie(false),
     liveViewReady(false),
     liveDataReady(false),
     frameNew(false),
@@ -108,10 +113,12 @@ namespace ofxEdsdk {
     
     bool Camera::close() {
         stopThread();
+        
         // for some reason waiting for the thread keeps it from
         // completing, but sleeping then stopping capture is ok.
         ofSleepMillis(100);
         stopCapture();
+        connected=false;
     }
     
     Camera::~Camera() {
@@ -429,6 +436,7 @@ namespace ofxEdsdk {
                 EdsUInt32 record_start = 4; // Begin movie shooting
                 EdsSetPropertyData(camera, kEdsPropID_Record, 0, sizeof(record_start), &record_start);
                 lock();
+                recordingMovie=true;
                 needToStartRecording = false;
                 unlock();
             } catch (Eds::Exception& e) {
@@ -441,6 +449,7 @@ namespace ofxEdsdk {
                 EdsUInt32 record_stop = 0; // End movie shooting
                 EdsSetPropertyData(camera, kEdsPropID_Record, 0, sizeof(record_stop), &record_stop);
                 lock();
+                recordingMovie=false;
                 needToStopRecording = false;
                 unlock();
             } catch (Eds::Exception& e) {

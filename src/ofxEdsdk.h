@@ -57,6 +57,7 @@ namespace ofxEdsdk {
         bool isConnected() {
             return connected;
         }
+        bool isRecordingMovie() { return recordingMovie; }
         
     protected:
         void initialize();
@@ -99,7 +100,8 @@ namespace ofxEdsdk {
 		 capture thread.
 		 */
 		bool connected; // camera is valid, OpenSession was successful, you can use Eds(camera) now.
-		bool liveViewReady; // Live view is initialized and connected, ready for downloading.
+        bool recordingMovie;
+        bool liveViewReady; // Live view is initialized and connected, ready for downloading.
 		bool liveDataReady; // Live view data has been downloaded at least once by threadedFunction().
 		bool frameNew; // There has been a new frame since the user last checked isFrameNew().
 		bool needToTakePhoto; // threadedFunction() should take a picture next chance it gets.
@@ -109,6 +111,7 @@ namespace ofxEdsdk {
 		bool photoDataReady; // Photo data has been downloaded at least once.
 		bool needToSendKeepAlive; // Send keepalive next chance we get.
 		bool needToDownloadImage; // Download image next chance we get.
+
         
         bool movieNew;
         bool needToStartRecording; // threadedFunction() should start recording next chance it gets.
