@@ -58,7 +58,9 @@ namespace ofxEdsdk {
             ((Camera*) context)->bulbExposureTime = param;
         }
         if(event == kEdsStateEvent_Shutdown) {
+            ((Camera*) context)->connected=false;
             ((Camera*) context)->setLiveViewReady(false);
+            ((Camera*) context)->close();
         }
         return EDS_ERR_OK;
     }
