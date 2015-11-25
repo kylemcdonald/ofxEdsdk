@@ -13,7 +13,8 @@ ofxEdsdk was developed with support from YCAM http://www.ycam.jp/
 4. Edit the folder name so that it only says "ofxEdsdk."
 5. Open the Canon EDSDK .dmg image and save the files somewhere you can get at them if you need to. 
 6. Copy the EDSDK folder into this directory: OF > addons > ofEdsdk > src
-7. Open the OF Project Generator application and build a new app, including the ofxEdsdk addon.
+7. If running oF 0.9.0 (64bit): replace the EDSDK.framework file from OF > addons > ofxEdsdk > src > EDSDK with the EDSDK.framework file from the EDSDK_64 directory from the files you pulled from the .dmg
+8. Open the OF Project Generator application and build a new app, including the ofxEdsdk addon.
 
 Following these steps will include Canon's developer library and this wrapper for all its functions for use in OF. You should be able to run the blank project successfully.
 
