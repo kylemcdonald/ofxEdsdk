@@ -100,7 +100,7 @@
       <AdditionalLibraryDirectories>..\..\..\addons\ofxEdsdk\libs\EDSDK\lib\$(Platform)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\libs\EDSDK\bin\$(Platform)/" "$(SolutionDir)bin/data/" "*.dll" /njs /njh /np /fp /bytes
+      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\libs\EDSDK\bin\$(Platform)/" "$(SolutionDir)bin/" "*.dll" /njs /njh /np /fp /bytes
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -121,7 +121,7 @@ if errorlevel 1 exit 0 else exit %errorlevel%</Command>
       <AdditionalLibraryDirectories>..\..\..\addons\ofxEdsdk\libs\EDSDK\lib\$(Platform)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\libs\EDSDK\bin\$(Platform)/" "$(SolutionDir)bin/data/" "*.dll" /njs /njh /np /fp /bytes
+      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\libs\EDSDK\bin\$(Platform)/" "$(SolutionDir)bin/" "*.dll" /njs /njh /np /fp /bytes
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -146,7 +146,7 @@ if errorlevel 1 exit 0 else exit %errorlevel%</Command>
       <AdditionalDependencies>EDSDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
-      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\libs\EDSDK\bin\$(Platform)/" "$(SolutionDir)bin/data/" "*.dll" /njs /njh /np /fp /bytes
+      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\libs\EDSDK\bin\$(Platform)/" "$(SolutionDir)bin/" "*.dll" /njs /njh /np /fp /bytes
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -171,7 +171,7 @@ if errorlevel 1 exit 0 else exit %errorlevel%</Command>
       <AdditionalLibraryDirectories>..\..\..\addons\ofxEdsdk\libs\EDSDK\lib\$(Platform)</AdditionalLibraryDirectories>
     </Lib>
     <PostBuildEvent>
-      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\libs\EDSDK\bin\$(Platform)/" "$(SolutionDir)bin/data/" "*.dll" /njs /njh /np /fp /bytes
+      <Command>robocopy "$(ProjectDir)..\..\..\addons\ofxEdsdk\libs\EDSDK\bin\$(Platform)/" "$(SolutionDir)bin/" "*.dll" /njs /njh /np /fp /bytes
 if errorlevel 1 exit 0 else exit %errorlevel%</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
