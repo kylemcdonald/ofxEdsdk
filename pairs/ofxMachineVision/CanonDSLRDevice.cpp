@@ -42,7 +42,7 @@ namespace ofxMachineVision {
 			//--
 
 			const auto & pixels = this->camera->getPhotoPixels();
-			Specification specification(pixels.getWidth(), pixels.getHeight(), "Canon", "Unknown");
+			Specification specification(pixels.getWidth(), pixels.getHeight(), "Canon", "Photo");
 			specification.addFeature(ofxMachineVision::Feature::Feature_OneShot);
 
 			return specification;
