@@ -34,7 +34,7 @@ namespace ofxMachineVision {
 				glfwPollEvents();
 				ofSleepMillis(1);
 				if (ofGetElapsedTimef() - startTime > 10.0f) {
-					throw(ofxMachineVision::Exception("Timeout opening device CanonDSLRDevice"));
+					throw(ofxMachineVision::Exception("Timeout opening device CanonDSLRDevice. Check you have a memory card in your camera."));
 				}
 			}
 			this->markFrameNew = true;
@@ -86,6 +86,11 @@ namespace ofxMachineVision {
 			frame->setTimestamp(ofGetElapsedTimeMicros() - this->openTime);
 			frame->setFrameIndex(this->frameIndex++);
 			return frame;
+		}
+
+		//----------
+		shared_ptr<ofxEdsdk::Camera> CanonDSLRDevice::getCamera() {
+			return this->camera;
 		}
 	}
 }

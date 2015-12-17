@@ -15,6 +15,8 @@ namespace ofxMachineVision {
 			void updateIsFrameNew() override;
 			bool isFrameNew() override;
 			shared_ptr<Frame> getFrame() override;
+
+			shared_ptr<ofxEdsdk::Camera> getCamera();
 		protected:
 			int frameIndex;
 			bool markFrameNew;
