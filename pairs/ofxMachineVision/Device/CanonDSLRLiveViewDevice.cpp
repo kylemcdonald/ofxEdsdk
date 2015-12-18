@@ -20,7 +20,8 @@ namespace ofxMachineVision {
 
 			try {
 				if (!this->camera->setup(deviceID)) {
-					throw(Exception("Cannot open camera [" + ofToString(deviceID) + "]"));
+                    auto message = "Cannot open camera [" + ofToString(deviceID) + "]";
+					throw(Exception(message));
 				}
 
 				this->openTime = ofGetElapsedTimeMicros();
