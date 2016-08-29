@@ -15,13 +15,13 @@ namespace ofxMachineVision {
 		}
 
 		//----------
-		Specification CanonDSLRLiveViewDevice::open(int deviceID) {
-			this->camera = make_shared<ofxEdsdk::Camera>();
-
+		Specification CanonDSLRLiveViewDevice::open(shared_ptr<Base::InitialisationSettings> initialisationSettings) {
+			this->camera = shared_ptr<ofxEdsdk::Camera>(new ofxEdsdk::Camera());
+			
 			try {
-				if (!this->camera->setup(deviceID)) {
-                    auto message = "Cannot open camera [" + ofToString(deviceID) + "]";
-					throw(Exception(message));
+				if (!this->camera->setup(initialisationSettings->deviceID)) {
+					auto message = "Cannot open camera [" + ofToString(initialisationSettings->deviceID) + "]";
+					throw(Exception(message)); 
 				}
 
 				this->openTime = ofGetElapsedTimeMicros();

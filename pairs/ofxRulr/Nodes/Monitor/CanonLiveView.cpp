@@ -22,10 +22,10 @@ namespace ofxRulr {
 
 				this->addInput<Item::Camera>();
 
-				this->view = make_shared<ofxCvGui::Panels::Draws>();
-				this->view->setCaption("LiveView");
-				this->view->onDraw += [this](ofxCvGui::DrawArguments & args) {
-					if (!this->view->getDrawObject()) {
+				this->panel = make_shared<ofxCvGui::Panels::Draws>();
+				this->panel->setCaption("LiveView");
+				this->panel->onDraw += [this](ofxCvGui::DrawArguments & args) {
+					if (!this->panel->getDrawObject()) {
 						//we have no target to draw, let's give a notice to the user
 						ofxCvGui::Utils::drawText("Connect Item::Camera with device type CanonDSLRDevice", args.localBounds);
 					}
@@ -39,8 +39,8 @@ namespace ofxRulr {
 
 
 			//----------
-			ofxCvGui::PanelPtr CanonLiveView::getView() {
-				return this->view;
+			ofxCvGui::PanelPtr CanonLiveView::getPanel() {
+				return this->panel;
 			}
 
 			//----------
@@ -52,7 +52,7 @@ namespace ofxRulr {
 					auto device = dynamic_pointer_cast<ofxMachineVision::Device::CanonDSLRDevice>(grabber->getDevice());
 					if (device) {
 						auto canonDevice = device->getCamera();
-						this->view->setDrawObject(canonDevice->getLiveTexture());
+						this->panel->setDrawObject(canonDevice->getLiveTexture());
 
 						//we succeeded so lets exit
 						return;
@@ -60,7 +60,7 @@ namespace ofxRulr {
 				}
 
 				//if we got here, then we're not valid and let's clear the object
-				this->view->clearDrawObject();
+				this->panel->clearDrawObject();
 			}
 		}
 	}

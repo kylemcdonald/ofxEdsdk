@@ -14,10 +14,10 @@ namespace ofxRulr {
 				void init();
 				void update();
 
-				ofxCvGui::PanelPtr getView();
+				ofxCvGui::PanelPtr getPanel() override;
 			protected:
 				void updateDrawObject();
-				shared_ptr<ofxCvGui::Panels::Draws> view;
+				shared_ptr<ofxCvGui::Panels::Draws> panel;
 			};
 		}
 	}

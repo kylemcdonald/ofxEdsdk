@@ -8,7 +8,10 @@ namespace ofxMachineVision {
 		public:
 			CanonDSLRDevice();
 			string getTypeName() const override;
-			Specification open(int deviceID) override;
+			shared_ptr<Base::InitialisationSettings> getDefaultSettings() override {
+				return make_shared<Base::InitialisationSettings>();
+			}
+			Specification open(shared_ptr<Base::InitialisationSettings> = nullptr) override;
 			void close() override;
 			void singleShot() override;
 

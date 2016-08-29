@@ -16,9 +16,9 @@ namespace ofxMachineVision {
 		}
 
 		//----------
-		Specification CanonDSLRDevice::open(int deviceID) {
+		Specification CanonDSLRDevice::open(shared_ptr<Base::InitialisationSettings> initialisationSettings) {
 			this->camera = shared_ptr<ofxEdsdk::Camera>(new ofxEdsdk::Camera());
-			if (!this->camera->setup(deviceID)) {
+			if (!this->camera->setup(initialisationSettings->deviceID)) {
 				return Specification();
 			}
 
