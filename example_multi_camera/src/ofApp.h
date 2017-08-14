@@ -1,6 +1,10 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxEdsdk.h"
+
+
+#define NUM_CAMS 2
 
 class ofApp : public ofBaseApp{
 
@@ -8,7 +12,9 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
-
+        void exit();
+    
+    
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );
@@ -21,4 +27,7 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 		
+        ofxEdsdk::Camera camera[NUM_CAMS];
+        bool bIsRecordingMovie = false;
+    int beginAt;
 };

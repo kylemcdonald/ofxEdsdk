@@ -13,11 +13,13 @@ namespace ofxEdsdk {
 	
 	class Camera : public ofThread {
 	public:
+        static void listDevices(string* s=0);
+        
 		Camera();
         void setDeviceId(int deviceId);
         void setOrientationMode(int orientationMode);
         void setLiveView(bool useLiveView);
-		void setup();
+		void setup(int deviceId = 0);
         bool close();
         ~Camera();
         
@@ -60,11 +62,14 @@ namespace ofxEdsdk {
         bool isRecordingMovie() { return recordingMovie; }
         
     protected:
-        void initialize();
         void startCapture();
         void captureLoop();
         void stopCapture();
 
+        static void initialize();
+        static void terminate();
+        static bool sdkInitialized;
+        
 		EdsCameraRef camera;
 		
 		RateTimer fps;
@@ -139,7 +144,6 @@ namespace ofxEdsdk {
 		
 		EdsDirectoryItemRef directoryItem;
         
-        int deviceId;
         int orientationMode;
 	};
 }

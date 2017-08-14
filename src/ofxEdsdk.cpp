@@ -65,8 +65,49 @@ namespace ofxEdsdk {
         return EDS_ERR_OK;
     }
     
+    void Camera::listDevices(string* s) {
+        try {
+            stringstream ss;
+            
+            initialize();
+            
+            EdsCameraListRef cameraList;
+            Eds::GetCameraList(&cameraList);
+            
+            UInt32 cameraCount;
+            Eds::GetChildCount(cameraList, &cameraCount);
+            
+            EdsDeviceInfo info;
+            EdsCameraRef camera;
+            ss << "ofxEdsdk found " << cameraCount << " cameras:" << endl;
+            ss << setw(10) << "Device ID" << setw(25) << "Description" << setw(6) << "Port " << setw(11) << "Reserved" << endl;
+            for(EdsInt32 i=0;i<cameraCount;++i) {
+                Eds::GetChildAtIndex(cameraList, i, &camera);
+                Eds::GetDeviceInfo(camera, &info);
+                
+                ss << setw(10) << i;
+                ss << setw(25) << info.szDeviceDescription;
+                ss << setw(6) << info.szPortName;
+                ss << setw(11) << info.reserved << endl;
+                
+                Eds::SafeRelease(camera);
+            }
+            terminate();
+            
+            //Eds::SafeRelease(cameraList);
+            
+            if (s==0) {
+                cout << ss.str() << endl;
+            } else {
+                *s = ss.str();
+            }
+        } catch (Eds::Exception& e) {
+            ofLogError() << "There was an error during Camera::listDevices(): " << e.what();
+        }	
+    }
+    
+    
     Camera::Camera() :
-    deviceId(0),
     bulbExposureTime(0),
     bShutterButtonDown(false),
     orientationMode(0),
@@ -100,9 +141,6 @@ namespace ofxEdsdk {
         liveBufferBack = new ofBuffer();
     }
     
-    void Camera::setDeviceId(int deviceId) {
-        this->deviceId = deviceId;
-    }
     
     void Camera::setOrientationMode(int orientationMode) {
         this->orientationMode = orientationMode;
@@ -112,15 +150,42 @@ namespace ofxEdsdk {
         this->useLiveView = useLiveView;
     }
     
-    void Camera::setup() {
-        initialize();
-        startCapture();
-        startThread();
+    void Camera::setup(int deviceId) {
+        
+        try {
+            initialize();
+            
+            EdsCameraListRef cameraList;
+            Eds::GetCameraList(&cameraList);
+            
+            EdsUInt32 cameraCount;
+            Eds::GetChildCount(cameraList, &cameraCount);
+            
+            if(cameraCount > 0) {
+                EdsInt32 cameraIndex = deviceId;
+                Eds::GetChildAtIndex(cameraList, cameraIndex, &camera);
+                Eds::SetObjectEventHandler(camera, kEdsObjectEvent_All, handleObjectEvent, this);
+                Eds::SetPropertyEventHandler(camera, kEdsPropertyEvent_All, handlePropertyEvent, this);
+                Eds::SetCameraStateEventHandler(camera, kEdsStateEvent_All, handleCameraStateEvent, this);
+                
+                EdsDeviceInfo info;
+                Eds::GetDeviceInfo(camera, &info);
+                Eds::SafeRelease(cameraList);
+                ofLogVerbose("ofxEdsdk::setup") << "connected camera model: " <<  info.szDeviceDescription << " " << info.szPortName << endl;
+                
+                startCapture();
+                startThread();
+            } else {
+                ofLogError() << "No cameras are connected for ofxEds::Camera::setup().";
+            }
+        } catch (Eds::Exception& e) {
+            ofLogError() << "There was an error during Camera::setup(): " << e.what();
+        }
     }
     
     bool Camera::close() {
         stopThread();
-        
+
         // for some reason waiting for the thread keeps it from
         // completing, but sleeping then stopping capture is ok.
         ofSleepMillis(100);
@@ -137,6 +202,8 @@ namespace ofxEdsdk {
         }
         delete liveBufferFront;
         delete liveBufferBack;
+        
+        terminate();
     }
     
     void Camera::update() {
@@ -351,35 +418,6 @@ namespace ofxEdsdk {
         }
     }
     
-    void Camera::initialize() {
-        try {
-            Eds::InitializeSDK();
-            
-            EdsCameraListRef cameraList;
-            Eds::GetCameraList(&cameraList);
-            
-            EdsUInt32 cameraCount;
-            Eds::GetChildCount(cameraList, &cameraCount);
-            
-            if(cameraCount > 0) {
-                EdsInt32 cameraIndex = deviceId;
-                Eds::GetChildAtIndex(cameraList, cameraIndex, &camera);
-                Eds::SetObjectEventHandler(camera, kEdsObjectEvent_All, handleObjectEvent, this);
-                Eds::SetPropertyEventHandler(camera, kEdsPropertyEvent_All, handlePropertyEvent, this);
-                Eds::SetCameraStateEventHandler(camera, kEdsStateEvent_All, handleCameraStateEvent, this);
-                
-                EdsDeviceInfo info;
-                Eds::GetDeviceInfo(camera, &info);
-                Eds::SafeRelease(cameraList);
-                ofLogVerbose("ofxEdsdk::setup") << "connected camera model: " <<  info.szDeviceDescription << " " << info.szPortName << endl;
-            } else {
-                ofLogError() << "No cameras are connected for ofxEds::Camera::setup().";
-            }
-        } catch (Eds::Exception& e) {
-            ofLogError() << "There was an error during Camera::setup(): " << e.what();
-        }
-    }
-    
     void Camera::startCapture() {
         try {
             Eds::OpenSession(camera);
@@ -402,7 +440,6 @@ namespace ofxEdsdk {
                     liveViewReady = false;
                 }
                 Eds::CloseSession(camera);
-                Eds::TerminateSDK();
                 connected = false;
             } catch (Eds::Exception& e) {
                 ofLogError() << "There was an error closing ofxEds::Camera: " << e.what();
@@ -565,5 +602,22 @@ namespace ofxEdsdk {
 #if defined(TARGET_WIN32)
         CoUninitialize();
 #endif
+    }
+    
+    bool Camera::sdkInitialized = false;
+    
+    
+    void Camera::initialize() {
+        if (!sdkInitialized) {
+            Eds::InitializeSDK();
+            sdkInitialized = true;
+        }
+    }
+    
+    void Camera::terminate() {
+        if (sdkInitialized) {
+            Eds::TerminateSDK();
+            sdkInitialized = false;
+        }
     }
 }
