@@ -225,9 +225,9 @@ namespace ofxEdsdk {
     }
     
     void Camera::endMovieRecording()
-		needToStopRecording = true;
     {
         lock();
+        needToStopRecording = true;
 		unlock();
     }
     

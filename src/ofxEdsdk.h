@@ -56,9 +56,7 @@ namespace ofxEdsdk {
         bool isShutterButtonPressed() {
             return bShutterButtonDown;
         }
-        bool isConnected() {
-            return connected;
-        }
+
         bool isRecordingMovie() { return recordingMovie; }
         
     protected:
