@@ -8,7 +8,7 @@
  but one frame happens to last 200 ms, and your buffer size is 4, you will drop
  2 frames if your camera is running at 30 fps.
  */
-#define OFX_EDSDK_BUFFER_SIZE 4
+#define OFX_EDSDK_BUFFER_SIZE 1
 #define OFX_EDSDK_LIVE_DELAY 100
 
 #define OFX_EDSDK_JPG_FORMAT 14337
@@ -85,6 +85,7 @@ namespace ofxEdsdk {
     needToLockUI(false),
     needToUnlockUI(false),
     movieNew(false),
+    useLiveView(true),
     needToDecodePhoto(false),
     needToUpdatePhoto(false),
     photoDataReady(false),
@@ -105,6 +106,10 @@ namespace ofxEdsdk {
     
     void Camera::setOrientationMode(int orientationMode) {
         this->orientationMode = orientationMode;
+    }
+    
+    void Camera::setLiveView(bool useLiveView) {
+        this->useLiveView = useLiveView;
     }
     
     void Camera::setup() {
@@ -220,17 +225,17 @@ namespace ofxEdsdk {
     }
     
     void Camera::endMovieRecording()
+		needToStopRecording = true;
     {
         lock();
-        needToStopRecording = true;
-        unlock();
+		unlock();
     }
     
     void Camera::lockUI()
     {
         lock();
         needToLockUI = true;
-        unlock();
+		return livePixels;
     }
     
     void Camera::unlockUI()
@@ -252,11 +257,7 @@ namespace ofxEdsdk {
         unlock();
     }
     
-    ofPixels& Camera::getLivePixels() {
-        return livePixels;
-    }
-    
-    ofPixels& Camera::getPhotoPixels() {
+    const ofPixels& Camera::getPhotoPixels() const {
         if(needToDecodePhoto) {
             ofLoadImage(photoPixels, photoBuffer);
             photoPixels.rotate90(orientationMode);
@@ -265,55 +266,55 @@ namespace ofxEdsdk {
         return photoPixels;
     }
     
-    unsigned int Camera::getWidth() const {
-        return livePixels.getWidth();
-    }
+	unsigned int Camera::getWidth() const {
+		return livePixels.getWidth();
+	}
+	
+	unsigned int Camera::getHeight() const {
+		return livePixels.getHeight();
+	}
+	
+	void Camera::draw(float x, float y) {
+		draw(x, y, getWidth(), getHeight());
+	}
+	
+	void Camera::draw(float x, float y, float width, float height) {
+		if(liveDataReady) {
+			liveTexture.draw(x, y, width, height);
+		}
+	}
     
-    unsigned int Camera::getHeight() const {
-        return livePixels.getHeight();
-    }
-    
-    void Camera::draw(float x, float y) {
-        draw(x, y, getWidth(), getHeight());
-    }
-    
-    void Camera::draw(float x, float y, float width, float height) {
-        if(liveDataReady) {
-            liveTexture.draw(x, y, width, height);
-        }
-    }
-    
-    ofTexture& Camera::getLiveTexture() {
-        return liveTexture;
-    }
-    
-    void Camera::drawPhoto(float x, float y) {
-        if(photoDataReady) {
-            ofPixels& photoPixels = getPhotoPixels();
-            draw(x, y, getWidth(), getHeight());
-        }
-    }
-    
-    void Camera::drawPhoto(float x, float y, float width, float height) {
-        if(photoDataReady) {
+	const ofTexture& Camera::getLiveTexture() const {
+		return liveTexture;
+	}
+	
+	void Camera::drawPhoto(float x, float y) {
+		if(photoDataReady) {
+			const ofPixels& photoPixels = getPhotoPixels();
+			draw(x, y, getWidth(), getHeight());
+		}
+	}
+	
+	void Camera::drawPhoto(float x, float y, float width, float height) {
+		if(photoDataReady) {
             getPhotoTexture().draw(x, y, width, height);
-        }
-    }
-    
-    ofTexture& Camera::getPhotoTexture() {
-        if(photoDataReady) {
-            ofPixels& photoPixels = getPhotoPixels();
-            if(needToUpdatePhoto) {
-                if(photoTexture.getWidth() != photoPixels.getWidth() ||
-                   photoTexture.getHeight() != photoPixels.getHeight()) {
-                    photoTexture.allocate(photoPixels.getWidth(), photoPixels.getHeight(), GL_RGB8);
-                }
-                photoTexture.loadData(photoPixels);
-                needToUpdatePhoto = false;
-            }
-        }
-        return photoTexture;
-    }
+		}
+	}
+	
+	const ofTexture& Camera::getPhotoTexture() const {
+		if(photoDataReady) {
+			const ofPixels& photoPixels = getPhotoPixels();
+			if(needToUpdatePhoto) {
+				if(photoTexture.getWidth() != photoPixels.getWidth() ||
+					 photoTexture.getHeight() != photoPixels.getHeight()) {
+					photoTexture.allocate(photoPixels.getWidth(), photoPixels.getHeight(), GL_RGB8);
+				}
+				photoTexture.loadData(photoPixels);
+				needToUpdatePhoto = false;
+			}
+		}
+		return photoTexture;
+	}
     
     bool Camera::isLiveDataReady() const {
         return liveDataReady;
@@ -383,7 +384,9 @@ namespace ofxEdsdk {
         try {
             Eds::OpenSession(camera);
             connected = true;
-            Eds::StartLiveview(camera);
+            if(useLiveView) {
+                Eds::StartLiveview(camera);
+            }
         } catch (Eds::Exception& e) {
             ofLogError() << "There was an error opening the camera, or starting live view: " << e.what();
             return;

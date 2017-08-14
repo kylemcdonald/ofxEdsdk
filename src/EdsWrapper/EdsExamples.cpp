@@ -53,7 +53,7 @@ namespace Eds {
 			frameNew = true;
 		} catch (Eds::Exception& e) {
 			if(e != EDS_ERR_OBJECT_NOTREADY) {
-				ofLogError() << "There was an error downloading the live view data:" << e.what();
+				ofLogError() << "There was an error downloading the live view data: " << e.what();
 			}
 		}
 		
@@ -84,7 +84,7 @@ namespace Eds {
 	
 	
 	void CopyStream(EdsStreamRef stream, ofBuffer& buffer) {
-		EdsUInt32 length;
+		EdsUInt64 length;
 		Eds::GetLength(stream, &length);
 		char* streamPointer;
 		Eds::GetPointer(stream, (EdsVoid**) &streamPointer);
