@@ -5,6 +5,12 @@
 *.app*
 *.DS_*
 
+Makefile
+*.xcconfig
+*.make
+*.xcodeproj
+*.plist
+
 .svn/
 obj/
 bin/
