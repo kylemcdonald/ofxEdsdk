@@ -13,11 +13,13 @@ namespace ofxEdsdk {
 	
 	class Camera : public ofThread {
 	public:
+        static void listDevices(string* s=0);
+        
 		Camera();
         void setDeviceId(int deviceId);
         void setOrientationMode(int orientationMode);
         void setLiveView(bool useLiveView);
-		void setup();
+		void setup(int deviceId = 0);
         bool close();
         ~Camera();
         
@@ -27,7 +29,7 @@ namespace ofxEdsdk {
 		unsigned int getHeight() const;
 		bool isLiveDataReady() const;
 		void draw(float x, float y);
-        void draw(float x, float y, float width, float height);
+		void draw(float x, float y, float width, float height);
         const ofPixels& getLivePixels() const;
         const ofTexture& getLiveTexture() const;
 		float getFrameRate();
@@ -37,22 +39,37 @@ namespace ofxEdsdk {
 		bool isPhotoNew();
 		void drawPhoto(float x, float y);
 		void drawPhoto(float x, float y, float width, float height);
-        bool savePhoto(string filename); // .jpg only
+		bool savePhoto(string filename); // .jpg only
         const ofPixels& getPhotoPixels() const;
         const ofTexture& getPhotoTexture() const;
         
         void beginMovieRecording();
         void endMovieRecording();
         bool isMovieNew();
-
+        
         bool isConnected() { return connected; }
+        void lockUI();
+        void unlockUI();
+        void pressShutterButton();
+        void releaseShutterButton();
+        
+        int bulbExposureTime;
+        bool bShutterButtonDown;
+        bool isShutterButtonPressed() {
+            return bShutterButtonDown;
+        }
+
+        bool isRecordingMovie() { return recordingMovie; }
         
     protected:
-        void initialize();
         void startCapture();
         void captureLoop();
         void stopCapture();
 
+        static void initialize();
+        static void terminate();
+        static bool sdkInitialized;
+        
 		EdsCameraRef camera;
 		
 		RateTimer fps;
@@ -66,7 +83,7 @@ namespace ofxEdsdk {
 		 At this point, the pixels are decoded into livePixels and uploaded to liveTexture.
 		 */
         ofBuffer* liveBufferBack;
-        FixedQueue<ofBuffer*> liveBufferMiddle;
+		FixedQueue<ofBuffer*> liveBufferMiddle;
         ofBuffer* liveBufferFront;
 		mutable ofPixels livePixels;
 		mutable ofTexture liveTexture;
@@ -89,7 +106,8 @@ namespace ofxEdsdk {
 		 */
 		bool connected; // camera is valid, OpenSession was successful, you can use Eds(camera) now.
         bool useLiveView; // Whether to initialize live view on setup().
-		bool liveViewReady; // Live view is initialized and connected, ready for downloading.
+        bool recordingMovie;
+        bool liveViewReady; // Live view is initialized and connected, ready for downloading.
 		bool liveDataReady; // Live view data has been downloaded at least once by threadedFunction().
 		bool frameNew; // There has been a new frame since the user last checked isFrameNew().
 		bool needToTakePhoto; // threadedFunction() should take a picture next chance it gets.
@@ -99,11 +117,16 @@ namespace ofxEdsdk {
 		bool photoDataReady; // Photo data has been downloaded at least once.
 		bool needToSendKeepAlive; // Send keepalive next chance we get.
 		bool needToDownloadImage; // Download image next chance we get.
+
         
         bool movieNew;
         bool needToStartRecording; // threadedFunction() should start recording next chance it gets.
         bool needToStopRecording; // threadedFunction() should start recording next chance it gets.
-		
+
+        bool needToLockUI;      // threadedFunction() should lock the UI next chance it gets. This makes it impossible to change settings on the camera.
+        bool needToUnlockUI;  // threadedFunction() should unlock the UI next chance it gets.
+        bool needToPressShutterButton; // threadedFunction() should press the shutter button completely down next chance it gets
+        bool needToReleaseShutterButton; // threadedFunction() should release the shutter button completely down next chance it gets
 		void threadedFunction();
         		
 		// the liveview needs to be reset every so often to avoid the camera turning off
@@ -121,7 +144,6 @@ namespace ofxEdsdk {
 		
 		EdsDirectoryItemRef directoryItem;
         
-        int deviceId;
         int orientationMode;
 	};
 }

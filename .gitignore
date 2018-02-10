@@ -19,3 +19,8 @@ build/
 
 lib/
 backup/
+/libs/EDSDK/Framework
+/libs/EDSDK/Header
+Project.xcconfig
+*.xcodeproj
+openFrameworks-Info.plist
